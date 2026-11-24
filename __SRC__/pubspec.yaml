@@ -1,0 +1,50 @@
+name: recipe_card
+description: "把散落在各平台的做菜内容，整理成统一风格、照着做就行的菜谱卡片。"
+publish_to: 'none'
+version: 1.50.2+59
+
+environment:
+  # 兼容 Dart 2.17（Flutter 3.0）到 Dart 3.x：源码只用两边都支持的语法
+  sdk: '>=2.17.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  # v1.12：让系统自带的那些控件说中文 —— 长按输入框弹出的
+  # 「复制 / 粘贴 / 全选 / 选择全部」、日期选择器、无障碍朗读，全走这套翻译。
+  # 不加这个包，Flutter 默认只有英文，中文用户长按只会看到 Cut / Copy / Paste。
+  flutter_localizations:
+    sdk: flutter
+
+  # 用「范围约束」而不是固定 ^ 起点：pub 会按你本机的 Dart 版本自动挑最高兼容版本，
+  # 老 Flutter 3.0 和 2026 年的新版 Flutter 都能直接 pub get，不用手动改版本号。
+  # 直连 DeepSeek（OpenAI 兼容格式）
+  http: ">=0.13.0 <2.0.0"
+  # 菜谱列表存本机；长图 PNG 存 App 私有目录
+  shared_preferences: ">=2.0.0 <3.0.0"
+  path_provider: ">=2.0.0 <3.0.0"
+  # 密钥存 Android Keystore / 加密 SharedPreferences，不写死在代码里
+  flutter_secure_storage: ">=8.0.0 <10.0.0"
+  # 选一张图文截图喂给多模态模型（Android 13+ 走系统 Photo Picker，无需权限）
+  image_picker: ">=0.8.0 <2.0.0"
+  image: ^4.2.0
+  # v1.13：备份导出用 zip（纯 Dart，不进 dex，约 200KB）。
+  # 菜谱数据 + 长图 + 步骤实拍图打成一个包，发微信/网盘都能存。
+  archive: ">=3.3.0 <4.0.0"
+  video_player: ^2.6.1
+
+dev_dependencies:
+  flutter_lints: ">=2.0.0 <6.0.0"
+  # 只用于本地跑配图/解析的回归测试，不会打进 APK
+  flutter_test:
+    sdk: flutter
+  # 只给「真联网下载语音包」那条自测用：测试里没法走 MethodChannel，
+  # 必须替换 PathProviderPlatform 才能把下载目录指到临时位置。
+  # 已经在 path_provider 的依赖树里，不会多下一个包。
+  path_provider_platform_interface: ">=2.0.0 <3.0.0"
+
+flutter:
+  # V1 不依赖任何外部图片/字体资源：图标全用 Material Icons，长图全部由代码绘制
+  uses-material-design: true
+  # assets:
+  #   - assets/

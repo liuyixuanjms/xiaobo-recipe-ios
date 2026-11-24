@@ -1,0 +1,62 @@
+# GitHub Actions：云端 Mac 编译 iOS IPA（免费额度）
+#
+# 用途：在这台 Windows 电脑上把代码 push 到 GitHub，
+#       GitHub 的云端 Mac 自动编译，编好后到 Actions 页面下载 IPA。
+#
+# 费用：公有仓库免费、私有仓库每月 2000 分钟免费 macOS 额度。
+#       编一次约 10~15 分钟。不用买 Mac、不用 $99。
+#
+# 用法：
+#   1. 在 GitHub 建一个仓库（建议私有，因为是你自用的菜谱 App）
+#   2. 把整个 recipe_app 目录推上去
+#   3. 在仓库页面点 Actions → 选 "Build iOS IPA" → Run workflow
+#   4. 跑完后点进这次运行，页面底部 Artifacts 里下载 ios-unsigned-ipa
+
+name: Build iOS IPA
+
+on:
+  workflow_dispatch:        # 手动点按钮触发
+  push:
+    branches: [ main, master ]
+
+jobs:
+  build:
+    runs-on: macos-14       # 云端 M1 Mac
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: 装 Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - name: 取依赖
+        run: flutter pub get
+
+      - name: 装 Pods
+        working-directory: ios
+        run: pod install --repo-update
+
+      - name: 编译（不签名，验证代码）
+        run: flutter build ios --release --no-codesign
+
+      - name: 打成未签名 IPA
+        working-directory: ios
+        run: |
+          xcodebuild -workspace Runner.xcworkspace \
+            -scheme Runner -configuration Release \
+            -archivePath build/Runner.xcarchive \
+            -sdk iphoneos CODE_SIGN_IDENTITY="" \
+            CODE_SIGNING_REQUIRED=NO archive
+          xcodebuild -exportArchive \
+            -archivePath build/Runner.xcarchive \
+            -exportPath build/unsigned \
+            -exportOptionsPlist ExportOptions.unsigned.plist
+
+      - name: 上传 IPA
+        uses: actions/upload-artifact@v4
+        with:
+          name: ios-unsigned-ipa
+          path: ios/build/unsigned/*.ipa
+          retention-days: 30

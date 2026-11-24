@@ -1,0 +1,47 @@
+# Codemagic 云端编译配置（v1.50.2+）
+#
+# 用途：在没有 Mac 的 Windows 电脑上，把 Flutter 项目推到 Codemagic，
+#       由它的云端 Mac 编译出 iOS IPA，再把 IPA 下载回来侧载。
+#
+# 费用：Codemagic 个人版每月有 500 分钟免费 macOS 构建额度，
+#       这个 App 编一次大约 10~15 分钟，一个月编几十次都够用。**不用买 Mac、不用 $99。**
+#
+# 重要：编译 IPA 不需要苹果开发者账号；只有「装到别人手机上长期用」才需要。
+#       这一步我们只要 IPA 出来，先用免费签名侧载测试。
+
+workflows:
+  ios-debug:
+    name: 小波菜谱 iOS（测试版 IPA）
+    max_build_duration: 60
+    instance_type: mac_mini_m2       # 云端 Mac，个人版免费额度可用
+    environment:
+      flutter: stable
+      xcode: latest
+      groups:
+        - ios-signing                # 可选：正式签名才需要，测试版可不填
+    scripts:
+      - name: 取 Flutter 依赖
+        script: flutter pub get
+      - name: 装 iOS Pods
+        script: |
+          cd ios
+          pod install --repo-update
+          cd ..
+      - name: 编译（不签名，先验证代码能不能过）
+        script: flutter build ios --release --no-codesign
+      - name: 打成未签名 IPA（给 Sideloadly 重签用）
+        script: |
+          cd ios
+          xcodebuild -workspace Runner.xcworkspace \
+            -scheme Runner -configuration Release \
+            -archivePath build/Runner.xcarchive \
+            -sdk iphoneos CODE_SIGN_IDENTITY="" \
+            CODE_SIGNING_REQUIRED=NO archive
+          xcodebuild -exportArchive \
+            -archivePath build/Runner.xcarchive \
+            -exportPath build/unsigned \
+            -exportOptionsPlist ExportOptions.unsigned.plist \
+            -allowProvisioningUpdates
+          cd ..
+    artifacts:
+      - ios/build/unsigned/*.ipa
