@@ -17,8 +17,6 @@ workflows:
     environment:
       flutter: stable
       xcode: latest
-      groups:
-        - ios-signing                # 可选：正式签名才需要，测试版可不填
     scripts:
       - name: 取 Flutter 依赖
         script: flutter pub get
