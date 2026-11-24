@@ -21,7 +21,7 @@ on:
 
 jobs:
   build:
-    runs-on: macos-14       # 云端 M1 Mac
+    runs-on: macos-13       # 云端 M1 Mac
     steps:
       - uses: actions/checkout@v4
 
