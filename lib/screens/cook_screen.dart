@@ -320,8 +320,7 @@ class _CookScreenState extends State<CookScreen> {
                         ? _finish
                         : () => _go(1),
                     style: ElevatedButton.styleFrom(
-                      foregroundColor: WidgetStateProperty.all(AppColors.primary),
-                      onForegroundColor: WidgetStateProperty.all(Colors.white),
+                      foregroundColor: AppColors.primary,
                       elevation: 0,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(14),
@@ -613,7 +612,7 @@ class _StepViewState extends State<_StepView> {
                 style: const TextStyle(fontSize: 13.5),
               ),
               style: TextButton.styleFrom(
-                foregroundColor: WidgetStateProperty.all(AppColors.subInk),
+                foregroundColor: AppColors.subInk,
                 padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                 // v1.48：从 30px 抬到 48dp——看画面是做菜时的高频动作。
                 minimumSize: const Size(0, 48),

@@ -1236,7 +1236,7 @@ class _NewRecipeScreenState extends State<NewRecipeScreen> {
                       child: TextButton(
                         onPressed: _confirmCancel,
                         style: TextButton.styleFrom(
-                          foregroundColor: WidgetStateProperty.all(Colors.white),
+                          foregroundColor: Colors.white,
                           padding: const EdgeInsets.symmetric(horizontal: 14),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(20),

@@ -432,7 +432,7 @@ class _ReviewScreenState extends State<ReviewScreen> {
               icon: const Icon(Icons.add, size: 16),
               label: const Text('全部补进用料', style: TextStyle(fontSize: 13)),
               style: OutlinedButton.styleFrom(
-                foregroundColor: WidgetStateProperty.all(const Color(0xFFC0491E)),
+                foregroundColor: const Color(0xFFC0491E),
                 side: const BorderSide(color: Color(0xFFE5A98E)),
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10)),
@@ -609,7 +609,7 @@ class _ReviewScreenState extends State<ReviewScreen> {
                     child: OutlinedButton(
                       onPressed: () => _applySuspicion(s),
                       style: OutlinedButton.styleFrom(
-                        foregroundColor: WidgetStateProperty.all(const Color(0xFFC0491E)),
+                        foregroundColor: const Color(0xFFC0491E),
                         side: const BorderSide(color: Color(0xFFE5A98E)),
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10)),
