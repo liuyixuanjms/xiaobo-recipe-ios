@@ -45,15 +45,15 @@ jobs:
       - name: 打成未签名 IPA
         working-directory: ios
         run: |
-          xcodebuild -workspace Runner.xcworkspace \
-            -scheme Runner -configuration Release \
-            -archivePath build/Runner.xcarchive \
-            -sdk iphoneos CODE_SIGN_IDENTITY="" \
-            CODE_SIGNING_REQUIRED=NO archive
-          xcodebuild -exportArchive \
-            -archivePath build/Runner.xcarchive \
-            -exportPath build/unsigned \
-            -exportOptionsPlist ExportOptions.unsigned.plist
+          APP_PATH="build/ios/iphoneos/Runner.app"
+          if [ ! -d "$APP_PATH" ]; then
+            echo "Runner.app not found"; find build -name "*.app" -maxdepth 6; exit 1
+          fi
+          mkdir -p build/unsigned/Payload
+          cp -R "$APP_PATH" build/unsigned/Payload/
+          cd build/unsigned
+          zip -qry Runner.ipa Payload
+          ls -lh Runner.ipa
 
       - name: 上传 IPA
         uses: actions/upload-artifact@v4
