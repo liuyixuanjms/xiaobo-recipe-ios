@@ -503,7 +503,7 @@ class _ViewerScreenState extends State<ViewerScreen> {
                       height: 48,
                       child: OutlinedButton.icon(
                         style: OutlinedButton.styleFrom(
-                          primary: AppColors.primary,
+                          foregroundColor: WidgetStateProperty.all(AppColors.primary),
                           side: BorderSide(color: AppColors.primary),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(14),

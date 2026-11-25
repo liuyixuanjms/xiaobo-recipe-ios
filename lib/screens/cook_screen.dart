@@ -320,9 +320,8 @@ class _CookScreenState extends State<CookScreen> {
                         ? _finish
                         : () => _go(1),
                     style: ElevatedButton.styleFrom(
-                      // Flutter 3.0 用的还是 primary / onPrimary 这套命名
-                      primary: AppColors.primary,
-                      onPrimary: Colors.white,
+                      foregroundColor: WidgetStateProperty.all(AppColors.primary),
+                      onForegroundColor: WidgetStateProperty.all(Colors.white),
                       elevation: 0,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(14),
@@ -614,7 +613,7 @@ class _StepViewState extends State<_StepView> {
                 style: const TextStyle(fontSize: 13.5),
               ),
               style: TextButton.styleFrom(
-                primary: AppColors.subInk,
+                foregroundColor: WidgetStateProperty.all(AppColors.subInk),
                 padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                 // v1.48：从 30px 抬到 48dp——看画面是做菜时的高频动作。
                 minimumSize: const Size(0, 48),
