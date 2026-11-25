@@ -9,7 +9,9 @@ import Flutter
   ) -> Bool {
     GeneratedPluginRegistrant.register(with: self)
     // v1.50.2+：注册菜谱自己的原生桥（对应 Android 的 MainActivity）
-    RecipeNative.register(with: self.registrar(forPlugin: "RecipeNative"))
+    if let registrar = self.registrar(forPlugin: "RecipeNative") {
+      RecipeNative.register(with: registrar)
+    }
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)
   }
 }
