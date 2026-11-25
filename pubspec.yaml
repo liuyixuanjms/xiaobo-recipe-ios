@@ -48,10 +48,3 @@ flutter:
   uses-material-design: true
   # assets:
   #   - assets/
-
-# iOS 云端编译兼容：新版 Flutter 会把 video_player 插件树升到需要 Swift 6 的版本，
-# 在 CocoaPods/Xcode 下报 'isolation' 参数错误。这里锁定到验证过的兼容版本。
-dependency_overrides:
-  video_player: 2.6.1
-  video_player_avfoundation: 2.3.9
-  video_player_platform_interface: 6.1.0
